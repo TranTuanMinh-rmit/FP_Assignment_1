@@ -4,9 +4,13 @@ package Prototype;
  */
 
 
+import java.io.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class InsuranceCard {
+    protected ArrayList<InsuranceCard> insuranceCards = new ArrayList<>();
     //Attributes//
     protected String insuranceID;
     protected Integer cardNumber;
@@ -66,8 +70,36 @@ public class InsuranceCard {
         this.cardExpDate = cardExpDate;
     }
 
-    // Methods //
+    // Data Handler //
+    public void readInsuranceCard() throws FileNotFoundException {
+        Scanner insuranceCardScanner = new Scanner(new File("src/Data/InsuranceCards.csv"));
+        insuranceCardScanner.useDelimiter(",|\n");
 
+        while (insuranceCardScanner.hasNext()){
+            String insuranceID = insuranceCardScanner.next();
+            Integer cardNumber = insuranceCardScanner.nextInt();
+            String cardHolder = insuranceCardScanner.next();
+            String cardPolicyOwner = insuranceCardScanner.next();
+            LocalDate cardExpDate = LocalDate.parse(insuranceCardScanner.next());
+            addInsuranceCardToList(insuranceID, cardNumber, cardHolder, cardPolicyOwner, cardExpDate);
+        }
+    }
+
+    public void writeInsuranceCard() throws IOException {
+        FileWriter insuranceCardFile = new FileWriter("src/Data/InsuranceCards.csv", false);
+        PrintWriter out0 = new PrintWriter(insuranceCardFile);
+
+        for (InsuranceCard insuranceCard : insuranceCards){
+            out0.printf("%s,%d,%s,%s,%s\n", insuranceCard.getInsuranceID(), insuranceCard.getCardNumber(), insuranceCard.getCardHolder(), insuranceCard.getCardPolicyOwner(), insuranceCard.getCardExpDate());
+        }
+        out0.close();
+    }
+
+    // Methods //
+    public void addInsuranceCardToList(String insuranceID, Integer cardNumber, String cardHolder, String cardPolicyOwner, LocalDate cardExpDate) {
+        InsuranceCard insuranceCard = new InsuranceCard(insuranceID, cardNumber, cardHolder, cardPolicyOwner, cardExpDate);
+        insuranceCards.add(insuranceCard);
+    }
 
     // toString //
     @Override

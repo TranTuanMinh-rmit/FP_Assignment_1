@@ -4,12 +4,17 @@ package Prototype;
  */
 
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class InsuranceClaim implements ClaimProcessManager{
-    private ArrayList<String> claimsList;
-    public ArrayList<String> getClaimsList() {
+    private ArrayList<InsuranceClaim> claimsList;
+    public ArrayList<InsuranceClaim> getClaimsList() {
         return claimsList;
     }
 
@@ -39,7 +44,7 @@ public class InsuranceClaim implements ClaimProcessManager{
     }
 
     public InsuranceClaim(Integer claimID, LocalDate claimDate, String claimInsuredPerson, InsuranceCard claimCardNumber, LocalDate examDate, String relatedDocuments, String claimStatus, String claimAmount, String bankingInfo) {
-        claimsList = new ArrayList<String>();
+        claimsList = new ArrayList<InsuranceClaim>();
         this.claimID = claimID;
         this.claimDate = claimDate;
         this.claimInsuredPerson = claimInsuredPerson;
@@ -111,7 +116,38 @@ public class InsuranceClaim implements ClaimProcessManager{
         this.bankingInfo = bankingInfo;
     }
 
-    // Data imports //
+    // Data Handlers //
+    public void readClaimData() throws FileNotFoundException {
+        Scanner claimScanner = new Scanner("src/Data/Claims.csv");
+        claimScanner.useDelimiter("[,\n]");
+
+        while (claimScanner.hasNext()) {
+            Integer claimID = claimScanner.nextInt();
+            LocalDate claimDate = LocalDate.parse(claimScanner.next());
+            String claimInsuredPerson = claimScanner.next();
+            InsuranceCard claimCardNumber = new InsuranceCard(claimScanner.next(), claimScanner.nextInt(), claimScanner.next(), claimScanner.next(), LocalDate.parse(claimScanner.next()));
+            LocalDate examDate = LocalDate.parse(claimScanner.next());
+            String relatedDocuments = claimScanner.next();
+            String claimStatus = claimScanner.next();
+            String claimAmount = claimScanner.next();
+            String bankingInfo = claimScanner.next();
+            addClaimToList(claimID, claimDate, claimInsuredPerson, claimCardNumber, examDate, relatedDocuments, claimStatus, claimAmount, bankingInfo);
+        }
+    }
+    public void writeClaimData() throws IOException {
+        FileWriter claimWriter = new FileWriter("src/Data/Claims.csv");
+        PrintWriter out2 = new PrintWriter(claimWriter);
+
+        for (InsuranceClaim claim : claimsList) {
+            out2.printf("%s,%s,%s,%s,%s,%s,%s,%s,%s\n", claim.getClaimID(), claim.getClaimDate(), claim.getClaimInsuredPerson(), claim.getClaimCardNumber(), claim.getExamDate(), claim.getRelatedDocuments(), claim.getClaimStatus(), claim.getClaimAmount(), claim.getBankingInfo());
+        }
+        out2.close();
+    }
+
+    // Methods //
+    public void addClaimToList(Integer claimID, LocalDate claimDate, String claimInsuredPerson, InsuranceCard claimCardNumber, LocalDate examDate, String relatedDocuments, String claimStatus, String claimAmount, String bankingInfo) {
+        claimsList.add(new InsuranceClaim(claimID, claimDate, claimInsuredPerson, claimCardNumber, examDate, relatedDocuments, claimStatus, claimAmount, bankingInfo));
+    }
 
     // CRUD //
     @Override
