@@ -4,5 +4,5 @@ package Prototype;
  */
 
 
-public class FunctionTest {
+public class DataProcessing {
 }

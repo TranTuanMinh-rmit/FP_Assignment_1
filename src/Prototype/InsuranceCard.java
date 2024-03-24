@@ -1,4 +1,8 @@
 package Prototype;
+/**
+ * @author <Tran Tuan Minh - s3804812>
+ */
+
 
 import java.time.LocalDate;
 
@@ -11,16 +15,24 @@ public class InsuranceCard {
     protected LocalDate cardExpDate;
 
 
-    //Constructor//
+    // Constructor //
+    public InsuranceCard() {
+        this.insuranceID = "";
+        this.cardNumber = 0;
+        this.cardHolder = "";
+        this.cardPolicyOwner = "";
+        this.cardExpDate = LocalDate.now();                         //This needs some more thoughts
+    }
+
     public InsuranceCard(String insuranceID, Integer cardNumber, String cardHolder, String cardPolicyOwner, LocalDate cardExpDate) {
         this.insuranceID = insuranceID;
         this.cardNumber = cardNumber;
         this.cardHolder = cardHolder;
         this.cardPolicyOwner = cardPolicyOwner;
-        this.cardExpDate = cardExpDate;
+        this.cardExpDate = cardExpDate;                             //This needs some more thoughts
     }
 
-    //Getter//
+    // Getters //
     public String getInsuranceID() {
         return insuranceID;
     }
@@ -37,7 +49,7 @@ public class InsuranceCard {
         return cardExpDate;
     }
 
-    //Setter//
+    // Setters //
     public void setInsuranceID(String insuranceID) {
         this.insuranceID = insuranceID;
     }
@@ -54,10 +66,10 @@ public class InsuranceCard {
         this.cardExpDate = cardExpDate;
     }
 
-    //Methods//
+    // Methods //
 
 
-    //toString//
+    // toString //
     @Override
     public String toString() {
         return "InsuranceCard{" +
