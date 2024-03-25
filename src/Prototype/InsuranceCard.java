@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class InsuranceCard {
+public class InsuranceCard implements DataHandler{
     protected ArrayList<InsuranceCard> insuranceCards = new ArrayList<>();
     //Attributes//
     protected String insuranceID;
@@ -71,7 +71,8 @@ public class InsuranceCard {
     }
 
     // Data Handler //
-    public void readInsuranceCard() throws FileNotFoundException {
+    @Override
+    public void readData() throws FileNotFoundException {
         Scanner insuranceCardScanner = new Scanner(new File("src/Data/InsuranceCards.csv"));
         insuranceCardScanner.useDelimiter(",|\n");
 
@@ -85,7 +86,8 @@ public class InsuranceCard {
         }
     }
 
-    public void writeInsuranceCard() throws IOException {
+    @Override
+    public void writeData() throws IOException {
         FileWriter insuranceCardFile = new FileWriter("src/Data/InsuranceCards.csv", false);
         PrintWriter out0 = new PrintWriter(insuranceCardFile);
 

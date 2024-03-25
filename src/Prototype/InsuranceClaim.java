@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class InsuranceClaim implements ClaimProcessManager{
+public class InsuranceClaim implements ClaimProcessManager, DataHandler{
     private ArrayList<InsuranceClaim> claimsList;
     public ArrayList<InsuranceClaim> getClaimsList() {
         return claimsList;
@@ -117,7 +117,8 @@ public class InsuranceClaim implements ClaimProcessManager{
     }
 
     // Data Handlers //
-    public void readClaimData() throws FileNotFoundException {
+    @Override
+    public void readData() throws FileNotFoundException {
         Scanner claimScanner = new Scanner("src/Data/Claims.csv");
         claimScanner.useDelimiter("[,\n]");
 
@@ -134,7 +135,8 @@ public class InsuranceClaim implements ClaimProcessManager{
             addClaimToList(claimID, claimDate, claimInsuredPerson, claimCardNumber, examDate, relatedDocuments, claimStatus, claimAmount, bankingInfo);
         }
     }
-    public void writeClaimData() throws IOException {
+    @Override
+    public void writeData() throws IOException {
         FileWriter claimWriter = new FileWriter("src/Data/Claims.csv");
         PrintWriter out2 = new PrintWriter(claimWriter);
 
