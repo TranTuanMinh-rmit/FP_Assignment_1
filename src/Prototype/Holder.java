@@ -5,13 +5,17 @@ package Prototype;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Holder extends Customer implements DataHandler{
     // ArrayList //
     ArrayList<Holder> holders = new ArrayList<>();
+    List<String> bufferClaimList = new ArrayList<>();                      //This ArrayList will act as a buffer for the claim list lookup
     ArrayList<Holder> bufferDependentList = new ArrayList<>();              //This ArrayList will act as a buffer for the dependent list lookup
     private Dependent dependent;
+    private InsuranceClaim insuranceClaim;
     // Attributes //
     private String holderControlID;
     // Constructor //
@@ -70,9 +74,22 @@ public class Holder extends Customer implements DataHandler{
         dependent = new Dependent();
         ArrayList<Dependent> dependents = dependent.getDependents();
         for (Holder holder : holders) {
+            String splitClaims[] = holder.getCustomerClaims().split("-");
+            bufferClaimList = Arrays.asList(splitClaims);
             System.out.println("====================================================================================================================================================================");
             System.out.println(String.format("=" ,"%-25 %-25 %-25 %-25", holder.getCustomerID() + " " + holder.getCustomerFullName() + " " + holder.getCustomerInsuranceCard() + " " + holder.getCustomerClaims() + "="));
             System.out.println("=------------------------------------------------------------------------------------------------------------------------------------------------------------------=");
+
+            //This loop will iterate through the bufferClaimList and print the claims of the holder
+            for (String claimID : bufferClaimList) {
+                for (InsuranceClaim claim : insuranceClaim.getClaimsList()) {
+                    if (claim.getClaimID().equals(claimID)) {
+                        System.out.println(String.format("=" ,"%-25 %-25 %-25 %-25", claim.getClaimID() + " " + claim.getClaimDate() + " " + claim.getClaimInsuredPerson() + " " + claim.getClaimCardNumber() + " " + claim.getExamDate() + " " + claim.getRelatedDocuments() + " " + claim.getClaimStatus() + " " + claim.getClaimAmount() + " " + claim.getBankingInfo() + "="));
+                    }
+                }
+            }
+
+            //This loop will iterate through the dependents list and print the dependents of the holder
             for (Dependent dependent : dependents) {
                 if (dependent.getDependOnHolderID().equals(holder.getCustomerID())) {
                     System.out.println(String.format("=" ,"%-25 %-25 %-25 %-25", dependent.getCustomerID() + " " + dependent.getCustomerFullName() + " " + dependent.getCustomerInsuranceCard() + " " + dependent.getCustomerClaims() + "="));

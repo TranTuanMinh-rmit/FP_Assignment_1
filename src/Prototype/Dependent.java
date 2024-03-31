@@ -17,6 +17,8 @@ public class Dependent extends Customer implements DataHandler{
     public ArrayList<Dependent> getDependents() {
         return dependents;
     }
+
+    private InsuranceClaim insuranceClaim;
     //Attributes//
     protected String dependentControlID;
     protected String dependOnHolderID;                  //This is the attribute for the Holder of their Insurance Card

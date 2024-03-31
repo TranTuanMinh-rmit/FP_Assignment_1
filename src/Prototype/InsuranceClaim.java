@@ -12,14 +12,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class InsuranceClaim implements ClaimProcessManager, DataHandler{
+public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generator{
     private ArrayList<InsuranceClaim> claimsList;
     public ArrayList<InsuranceClaim> getClaimsList() {
         return claimsList;
     }
 
     //Attributes//
-    protected Integer claimID;
+    protected String claimID;
     protected LocalDate claimDate;
     protected String claimInsuredPerson;
     protected InsuranceCard claimCardNumber;                      //This is a placeholder for the card number, will investigate it from class InsuranceCard
@@ -32,7 +32,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
 
     // Constructor //
     public InsuranceClaim() {
-        this.claimID = 0;
+        this.claimID = "f-0000000000";
         this.claimDate = LocalDate.now();
         this.claimInsuredPerson = "";
         this.claimCardNumber = new InsuranceCard();
@@ -43,7 +43,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
         this.bankingInfo = "";
     }
 
-    public InsuranceClaim(Integer claimID, LocalDate claimDate, String claimInsuredPerson, InsuranceCard claimCardNumber, LocalDate examDate, String relatedDocuments, String claimStatus, String claimAmount, String bankingInfo) {
+    public InsuranceClaim(String claimID, LocalDate claimDate, String claimInsuredPerson, InsuranceCard claimCardNumber, LocalDate examDate, String relatedDocuments, String claimStatus, String claimAmount, String bankingInfo) {
         claimsList = new ArrayList<InsuranceClaim>();
         this.claimID = claimID;
         this.claimDate = claimDate;
@@ -58,7 +58,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
 
 
     // Getters //
-    public Integer getClaimID() {
+    public String getClaimID() {
         return claimID;
     }
     public LocalDate getClaimDate() {
@@ -88,7 +88,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
     }
 
     // Setter //
-    public void setClaimID(Integer claimID) {
+    public void setClaimID(String claimID) {
         this.claimID = claimID;
     }
     public void setClaimDate(LocalDate claimDate) {
@@ -123,7 +123,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
         claimScanner.useDelimiter("[,\n]");
 
         while (claimScanner.hasNext()) {
-            Integer claimID = claimScanner.nextInt();
+            String claimID = claimScanner.nextLine();
             LocalDate claimDate = LocalDate.parse(claimScanner.next());
             String claimInsuredPerson = claimScanner.next();
             InsuranceCard claimCardNumber = new InsuranceCard(claimScanner.next(), claimScanner.nextInt(), claimScanner.next(), claimScanner.next(), LocalDate.parse(claimScanner.next()));
@@ -147,14 +147,49 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
     }
 
     // Methods //
-    public void addClaimToList(Integer claimID, LocalDate claimDate, String claimInsuredPerson, InsuranceCard claimCardNumber, LocalDate examDate, String relatedDocuments, String claimStatus, String claimAmount, String bankingInfo) {
+    public void addClaimToList(String claimID, LocalDate claimDate, String claimInsuredPerson, InsuranceCard claimCardNumber, LocalDate examDate, String relatedDocuments, String claimStatus, String claimAmount, String bankingInfo) {
         claimsList.add(new InsuranceClaim(claimID, claimDate, claimInsuredPerson, claimCardNumber, examDate, relatedDocuments, claimStatus, claimAmount, bankingInfo));
+    }
+
+    @Override
+    public void generateID() {
+        //This method will generate a unique claim ID for each claim
+
+    }
+
+    @Override
+    public void generateDate() {
+        //This method will generate the current date for the claim
     }
 
     // CRUD //
     @Override
     public void add() {
+        Scanner input = new Scanner(System.in);
+        boolean running = true;
+        while (running) {
 
+            System.out.println("Enter the name of the insured person: ");
+            String claimInsuredPerson = input.next();
+            System.out.println("Enter the card number: ");
+            InsuranceCard claimCardNumber = new InsuranceCard();
+            System.out.println("Enter the examination date: ");
+            LocalDate examDate = LocalDate.parse(input.next());
+            System.out.println("Enter the related documents: ");
+            String relatedDocuments = input.next();
+            System.out.println("Enter the claim status: ");
+            String claimStatus = input.next();
+            System.out.println("Enter the claim amount: ");
+            String claimAmount = input.next();
+            System.out.println("Enter the banking information: ");
+            String bankingInfo = input.next();
+            addClaimToList(claimID, claimDate, claimInsuredPerson, claimCardNumber, examDate, relatedDocuments, claimStatus, claimAmount, bankingInfo);
+            System.out.println("Do you want to add another claim? (Y/N)");
+            String choice = input.next();
+            if (choice.equalsIgnoreCase("N")) {
+                running = false;
+            }
+        }
     }
 
     @Override
