@@ -21,7 +21,7 @@ public class InsuranceCard implements DataHandler{
 
     // Constructor //
     public InsuranceCard() {
-        this.insuranceID = "";
+        this.insuranceID = "CRD0000000000";
         this.cardNumber = 0;
         this.cardHolder = "";
         this.cardPolicyOwner = "";

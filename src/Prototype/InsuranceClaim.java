@@ -33,7 +33,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
 
     // Constructor //
     public InsuranceClaim() {
-        this.claimID = "f-0000000000";
+        this.claimID = "F-0000000000";
         this.claimDate = LocalDate.now();
         this.claimInsuredPerson = "";
         this.claimCardNumber = new InsuranceCard();
@@ -174,7 +174,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
     @Override
     public String generateID(String lastID){
         //This method will generate a unique claim ID for each claim
-        String newID = ("f-" + lastID);
+        String newID = String.format("f-" + "%010d",lastID);
         return newID;
     }
 
@@ -189,12 +189,13 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
             String claimID = generateID(String.valueOf(lastClaimIDGenerated));
             writeLastIDGenerated();
             Thread.sleep(300);
-            claimDate = LocalDate.now();
+            System.out.println("Enter the claim date [yyyy-MM-dd]: ");                      //This is running under the assumption that this is the day a customer is filling for a claim
+            LocalDate claimDate = LocalDate.parse(input.next());
             System.out.println("Enter the name of the insured person: ");
             String claimInsuredPerson = input.next();
             System.out.println("Enter the card number: ");
             InsuranceCard claimCardNumber = new InsuranceCard();
-            System.out.println("Enter the examination date [yyyy-MM-dd]: ");
+            System.out.println("Enter the examination date [yyyy-MM-dd]: ");                //This is the day set for examining the customer making this claim
             LocalDate examDate = LocalDate.parse(input.next());
             System.out.println("Enter the related documents: ");
             String relatedDocuments = input.next();
@@ -230,6 +231,9 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
 
     @Override
     public void getAll() {
-
+        System.out.println(String.format("%-15s %-25s %-20s %-15s %-15s %-15s %-15s %-15s %-15s", "Claim ID", "Claim Date", "Insured Person", "Card Number", "Exam Date", "Related Documents", "Claim Status", "Claim Amount", "Banking Info"));
+        for (InsuranceClaim claim : claimsList) {
+            System.out.println(String.format("%-15s %-25s %-20s %-15s %-15s %-15s %-15s %-15s %-15s", claim.getClaimID(), claim.getClaimDate(), claim.getClaimInsuredPerson(), claim.getClaimCardNumber(), claim.getExamDate(), claim.getRelatedDocuments(), claim.getClaimStatus(), claim.getClaimAmount(), claim.getBankingInfo()));
+        }
     }
 }

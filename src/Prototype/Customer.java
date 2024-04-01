@@ -13,8 +13,8 @@ public abstract class Customer {
     public Customer() {
         customerID = "C000";
         customerFullName = "Default Name";
-        customerInsuranceCard = "CRD000";
-        customerClaims = "CL000-CL001";
+        customerInsuranceCard = "CRD0000000000";
+        customerClaims = "None";
     }
 
     public Customer(String customerID, String customerFullName, String customerInsuranceCard, String customerClaims) {
