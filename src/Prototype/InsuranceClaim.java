@@ -172,26 +172,24 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
     }
 
     @Override
-    public void generateID() {
+    public String generateID(String lastID){
         //This method will generate a unique claim ID for each claim
-        lastClaimIDGenerated++;
-        String newClaimID = String.valueOf(lastClaimIDGenerated);
-        setClaimID("f-" + newClaimID);
-    }
-
-    @Override
-    public void generateDate() {
-        //This class does not need this method
+        String newID = ("f-" + lastID);
+        return newID;
     }
 
     // CRUD //
     @Override
-    public void add() throws InterruptedException {
+    public void add() throws InterruptedException, IOException {
         Scanner input = new Scanner(System.in);
         boolean running = true;
         while (running) {
             System.out.println("Generated claim ID...");
+            lastClaimIDGenerated++;
+            String claimID = generateID(String.valueOf(lastClaimIDGenerated));
+            writeLastIDGenerated();
             Thread.sleep(300);
+            claimDate = LocalDate.now();
             System.out.println("Enter the name of the insured person: ");
             String claimInsuredPerson = input.next();
             System.out.println("Enter the card number: ");
@@ -204,9 +202,9 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
             String claimStatus = input.next();
             System.out.println("Enter the claim amount: ");
             String claimAmount = input.next();
-            System.out.println("Enter the banking information: ");
+            System.out.println("Enter the banking information [TBA]: ");
             String bankingInfo = input.next();
-            addClaimToList(claimID, claimDate, claimInsuredPerson, claimCardNumber, examDate, relatedDocuments, claimStatus, claimAmount, bankingInfo);
+            addClaimToList(claimID, claimDate, claimInsuredPerson, claimCardNumber, examDate, relatedDocuments + ".pdf", claimStatus, claimAmount, bankingInfo);
             System.out.println("Do you want to add another claim? (Y/N)");
             String choice = input.next();
             if (choice.equalsIgnoreCase("N")) {

@@ -6,6 +6,5 @@ import java.io.IOException;
 public interface Generator {
     public void getLastIDGenerated() throws FileNotFoundException;
     public void writeLastIDGenerated() throws IOException;
-    public void generateID();
-    public void generateDate();
+    public String generateID(String lastID);
 }
