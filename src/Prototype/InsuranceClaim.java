@@ -13,10 +13,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generator{
-    private ArrayList<InsuranceClaim> claimsList;
+    private ArrayList<InsuranceClaim> claimsList = new ArrayList<>();
     public ArrayList<InsuranceClaim> getClaimsList() {
         return claimsList;
     }
+    protected Integer lastClaimIDGenerated;
 
     //Attributes//
     protected String claimID;
@@ -44,7 +45,6 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
     }
 
     public InsuranceClaim(String claimID, LocalDate claimDate, String claimInsuredPerson, InsuranceCard claimCardNumber, LocalDate examDate, String relatedDocuments, String claimStatus, String claimAmount, String bankingInfo) {
-        claimsList = new ArrayList<InsuranceClaim>();
         this.claimID = claimID;
         this.claimDate = claimDate;
         this.claimInsuredPerson = claimInsuredPerson;
@@ -151,33 +151,56 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
         claimsList.add(new InsuranceClaim(claimID, claimDate, claimInsuredPerson, claimCardNumber, examDate, relatedDocuments, claimStatus, claimAmount, bankingInfo));
     }
 
+    // Generators for ID and Date //
+    @Override
+    public void getLastIDGenerated() throws FileNotFoundException{
+        //This method will get the last claim ID generated
+        Scanner lastIDScanner = new Scanner("src/Datafile/LastClaimsIDGenerated.csv");
+
+        while (lastIDScanner.hasNext()) {
+            lastClaimIDGenerated = lastIDScanner.nextInt();
+        }
+    }
+
+    @Override
+    public void writeLastIDGenerated() throws IOException {
+        //This method will set the last claim ID generated
+        FileWriter lastIDWriter = new FileWriter("src/Datafile/LastClaimsIDGenerated.csv");
+        PrintWriter out3 = new PrintWriter(lastIDWriter);
+        out3.printf("%d", lastClaimIDGenerated);
+        out3.close();
+    }
+
     @Override
     public void generateID() {
         //This method will generate a unique claim ID for each claim
-
+        lastClaimIDGenerated++;
+        String newClaimID = String.valueOf(lastClaimIDGenerated);
+        setClaimID("f-" + newClaimID);
     }
 
     @Override
     public void generateDate() {
-        //This method will generate the current date for the claim
+        //This class does not need this method
     }
 
     // CRUD //
     @Override
-    public void add() {
+    public void add() throws InterruptedException {
         Scanner input = new Scanner(System.in);
         boolean running = true;
         while (running) {
-
+            System.out.println("Generated claim ID...");
+            Thread.sleep(300);
             System.out.println("Enter the name of the insured person: ");
             String claimInsuredPerson = input.next();
             System.out.println("Enter the card number: ");
             InsuranceCard claimCardNumber = new InsuranceCard();
-            System.out.println("Enter the examination date: ");
+            System.out.println("Enter the examination date [yyyy-MM-dd]: ");
             LocalDate examDate = LocalDate.parse(input.next());
             System.out.println("Enter the related documents: ");
             String relatedDocuments = input.next();
-            System.out.println("Enter the claim status: ");
+            System.out.println("Enter the claim status [Accepted - Pending - Denied]: ");
             String claimStatus = input.next();
             System.out.println("Enter the claim amount: ");
             String claimAmount = input.next();

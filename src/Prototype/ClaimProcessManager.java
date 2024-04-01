@@ -5,7 +5,7 @@ package Prototype;
 
 
 public interface ClaimProcessManager {
-    public void add();
+    public void add() throws InterruptedException;
     public void update();
     public void delete();
     public void getOne();
