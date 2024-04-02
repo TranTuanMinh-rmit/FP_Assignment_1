@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generator{
@@ -23,9 +24,9 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
     protected String claimID;
     protected LocalDate claimDate;
     protected String claimInsuredPerson;
-    protected InsuranceCard claimCardNumber;                      //This is a placeholder for the card number, will investigate it from class InsuranceCard
+    protected InsuranceCard claimCardNumber;
     protected LocalDate examDate;
-    private String relatedDocuments;                              //This is a placeholder for the related documents, will investigate it from class Documents
+    private String relatedDocuments;
     protected String claimStatus;                                 //New, Pending, Done. One of the three, nothing else, will have exception handler for this
     protected String claimAmount;
     protected String bankingInfo;
@@ -165,7 +166,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
     @Override
     public void writeLastIDGenerated() throws IOException {
         //This method will set the last claim ID generated
-        FileWriter lastIDWriter = new FileWriter("src/Datafile/LastClaimsIDGenerated.csv");
+        FileWriter lastIDWriter = new FileWriter("src/Datafile/LastClaimsIDGenerated.csv", false);
         PrintWriter out3 = new PrintWriter(lastIDWriter);
         out3.printf("%d", lastClaimIDGenerated);
         out3.close();
@@ -199,7 +200,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
             LocalDate examDate = LocalDate.parse(input.next());
             System.out.println("Enter the related documents: ");
             String relatedDocuments = input.next();
-            System.out.println("Enter the claim status [Accepted - Pending - Denied]: ");
+            System.out.println("Enter the claim status [New - Pending - Done]: ");
             String claimStatus = input.next();
             System.out.println("Enter the claim amount: ");
             String claimAmount = input.next();
@@ -214,21 +215,119 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
         }
     }
 
-    @Override
-    public void update() {
 
+    // This method is for updating the information of a claim. Right now it can update the examination date, claim status and claim amount.
+    @Override
+    public void update() throws IOException{
+        ArrayList<InsuranceClaim> claimsFoundUpdate = new ArrayList<>();
+        Scanner inputClaimForUpdate = new Scanner(System.in);
+        System.out.println("Enter the ID of the Insurance Claim you want to update: ");
+        String claimIDToUpdate = inputClaimForUpdate.next();
+        for (InsuranceClaim claim : claimsList) {
+            if (claim.getClaimID().equals(claimIDToUpdate)) {
+                claimsFoundUpdate.add(claim);
+            }
+        }
+        if (claimsFoundUpdate.isEmpty()){
+            System.out.println("No such claim is found!");
+        } else {
+            Boolean runningUpdate = true;
+            while (runningUpdate){
+                System.out.println("What would you like to update? \n"
+                        + "1. Change Exam Date \n"
+                        + "2. Change Claim Status \n"
+                        + "3. Change Claim Amount \n"
+                        + "4. Exit \n");
+                String updateChoice = inputClaimForUpdate.next();
+
+                switch(updateChoice){
+                    case "1":
+                        System.out.println("Enter the new examination date [yyyy-MM-dd]: ");
+                        LocalDate newExamDate = LocalDate.parse(inputClaimForUpdate.next());
+                        for (InsuranceClaim claim : claimsFoundUpdate){
+                            claim.setExamDate(newExamDate);
+                        }
+                        writeData();
+                        break;
+                    case "2":
+                        System.out.println("Enter the new claim status [New - Pending - Done]: ");
+                        String newClaimStatus = inputClaimForUpdate.next();
+                        for (InsuranceClaim claim : claimsFoundUpdate){
+                            claim.setClaimStatus(newClaimStatus);
+                        }
+                        writeData();
+                        break;
+                    case "3":
+                        System.out.println("Enter the new claim amount: ");
+                        String newClaimAmount = inputClaimForUpdate.next();
+                        for (InsuranceClaim claim : claimsFoundUpdate){
+                            claim.setClaimAmount(newClaimAmount);
+                        }
+                        writeData();
+                        break;
+                    case "4":
+                        runningUpdate = false;
+                    default:
+                        System.out.println("Invalid Input!");
+                }
+            }
+        }
     }
 
+
+    //This method is for deleting a claim. Only 1 claim can be deleted at a time. Will see for it to delete multiple claims at once in the future.
     @Override
     public void delete() {
-
+        ArrayList<InsuranceClaim> claimsFoundDelete = new ArrayList<>();
+        Iterator deleteIterator = claimsList.iterator();
+        Scanner inputClaimForDelete = new Scanner(System.in);
+        System.out.println("Enter the ID of the Insurance Claim you want to delete: ");
+        String claimIDToDelete = inputClaimForDelete.next();
+        for (InsuranceClaim claim : claimsList) {
+            if (claim.getClaimID().equals(claimIDToDelete)) {
+                claimsFoundDelete.add(claim);
+            }
+        }
+        if (claimsFoundDelete.isEmpty()) {
+            System.out.println("No such claim is found!");
+        } else {
+            while (deleteIterator.hasNext()) {
+                System.out.print("Insurance Claim found!");
+                System.out.println(String.format("%-15s %-25s %-20s %-15s %-15s %-15s %-15s %-15s %-15s", "Claim ID", "Claim Date", "Insured Person", "Card Number", "Exam Date", "Related Documents", "Claim Status", "Claim Amount", "Banking Info"));
+                for (InsuranceClaim claim : claimsFoundDelete) {
+                    System.out.println(String.format("%-15s %-25s %-20s %-15s %-15s %-15s %-15s %-15s %-15s", claim.getClaimID(), claim.getClaimDate(), claim.getClaimInsuredPerson(), claim.getClaimCardNumber(), claim.getExamDate(), claim.getRelatedDocuments(), claim.getClaimStatus(), claim.getClaimAmount(), claim.getBankingInfo()));
+                }
+                InsuranceClaim claim = (InsuranceClaim) deleteIterator.next();
+                if (claim.getClaimID().equals(claimIDToDelete)) {
+                    deleteIterator.remove();
+                }
+            }
+            System.out.println("Insurance Claim removed!");
+        }
     }
 
     @Override
     public void getOne() {
-
+        ArrayList<InsuranceClaim> claimFoundDisplay = new ArrayList<>();
+        Scanner inputClaimForDisplay = new Scanner(System.in);
+        System.out.println("Enter the ID of the Insurance Claim you want to display: ");
+        String claimIDToDisplay = inputClaimForDisplay.next();
+        for (InsuranceClaim claim : claimsList) {
+            if (claim.getClaimID().equals(claimIDToDisplay)) {
+                claimFoundDisplay.add(claim);
+            }
+        }
+        if (claimFoundDisplay.isEmpty()) {
+            System.out.println("No such claim is found!");
+        } else {
+            System.out.println(String.format("%-15s %-25s %-20s %-15s %-15s %-15s %-15s %-15s %-15s", "Claim ID", "Claim Date", "Insured Person", "Card Number", "Exam Date", "Related Documents", "Claim Status", "Claim Amount", "Banking Info"));
+            for (InsuranceClaim claim : claimFoundDisplay) {
+                System.out.println(String.format("%-15s %-25s %-20s %-15s %-15s %-15s %-15s %-15s %-15s", claim.getClaimID(), claim.getClaimDate(), claim.getClaimInsuredPerson(), claim.getClaimCardNumber(), claim.getExamDate(), claim.getRelatedDocuments(), claim.getClaimStatus(), claim.getClaimAmount(), claim.getBankingInfo()));
+            }
+        }
     }
 
+    //Basic claims dump
     @Override
     public void getAll() {
         System.out.println(String.format("%-15s %-25s %-20s %-15s %-15s %-15s %-15s %-15s %-15s", "Claim ID", "Claim Date", "Insured Person", "Card Number", "Exam Date", "Related Documents", "Claim Status", "Claim Amount", "Banking Info"));

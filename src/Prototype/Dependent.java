@@ -59,7 +59,7 @@ public class Dependent extends Customer implements DataHandler{
 
     @Override
     public void writeData() throws IOException {
-        FileWriter dependentWriter = new FileWriter("src/Datafiles/DependentData.csv");
+        FileWriter dependentWriter = new FileWriter("src/Datafiles/DependentData.csv", false);
         PrintWriter out1 = new PrintWriter(dependentWriter);
 
         for (Dependent dependent : dependents) {

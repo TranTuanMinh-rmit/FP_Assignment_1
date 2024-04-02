@@ -41,7 +41,7 @@ public class Holder extends Customer implements DataHandler{
 
     @Override
     public void writeData() throws IOException{
-        FileWriter holderWriter = new FileWriter("src/Datafiles/HolderData.csv");
+        FileWriter holderWriter = new FileWriter("src/Datafiles/HolderData.csv", false);
         PrintWriter out0 = new PrintWriter(holderWriter);
 
         for (Holder holder : holders){
