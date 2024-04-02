@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class InsuranceCard implements DataHandler{
+public class InsuranceCard implements DataHandler, ClaimProcessManager{
     protected ArrayList<InsuranceCard> insuranceCards = new ArrayList<>();
     //Attributes//
     protected String insuranceID;
@@ -103,15 +103,37 @@ public class InsuranceCard implements DataHandler{
         insuranceCards.add(insuranceCard);
     }
 
+    @Override
+    public void add() throws InterruptedException, IOException {
+
+    }
+
+    @Override
+    public void update() throws IOException {
+
+    }
+
+    @Override
+    public void delete() {
+
+    }
+
+    @Override
+    public void getOne() {
+
+    }
+
+    @Override
+    public void getAll() {
+        System.out.printf("%-20s %-20s %-20s %-20s %-20s\n", "Insurance ID", "Card Number", "Card Holder", "Policy Owner", "Expiry Date");
+        for (InsuranceCard insuranceCard : insuranceCards){
+            System.out.println(insuranceCard.toString());
+        }
+    }
+
     // toString //
     @Override
     public String toString() {
-        return "InsuranceCard{" +
-                "insuranceID='" + insuranceID + '\'' +
-                ", cardNumber=" + cardNumber +
-                ", cardHolder='" + cardHolder + '\'' +
-                ", cardPolicyOwner='" + cardPolicyOwner + '\'' +
-                ", cardExpDate=" + cardExpDate +
-                '}';
+        return insuranceID + cardNumber + cardHolder + cardPolicyOwner + cardExpDate;
     }
 }

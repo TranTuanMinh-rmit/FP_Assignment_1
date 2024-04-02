@@ -1,9 +1,9 @@
 package Prototype;
+/**
+ * @author <Tran Tuan Minh - s3804812>
+ */
 
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,7 +18,8 @@ public class Dependent extends Customer implements DataHandler{
         return dependents;
     }
 
-    private InsuranceClaim insuranceClaim;
+    private InsuranceClaim insuranceClaim = new InsuranceClaim();
+    private Holder holder = new Holder();
     //Attributes//
     protected String dependOnHolderID;                  //This is the attribute for the Holder of their Insurance Card
 
@@ -69,6 +70,28 @@ public class Dependent extends Customer implements DataHandler{
     }
 
     // Methods //
+    public void printAllDependents() throws FileNotFoundException {
+        readData();
+        ArrayList<InsuranceClaim> insuranceClaims = insuranceClaim.getClaimsList();
+        ArrayList<Holder> holders = holder.getHolders();
+        for (Dependent dependent : dependents) {
+            System.out.printf("%-20s %-20s %-20s\n", "Customer ID", "Customer Name", "Insurance Card");
+            System.out.printf("%-20s %-20s %-20s\n", dependent.getCustomerID(), dependent.getCustomerFullName(), dependent.getCustomerInsuranceCard());
+            System.out.println("Depending on Holder");
+            for (Holder holder : holders) {
+                if (holder.getCustomerID().equals(dependent.getDependOnHolderID())) {
+                    System.out.printf("%-20s %-20s %-20s\n", holder.getCustomerID(), holder.getCustomerFullName(), holder.getCustomerInsuranceCard());
+                }
+            }
+            System.out.println("Insurance Claims");
+            for (InsuranceClaim insuranceClaim : insuranceClaims) {
+                if (insuranceClaim.getClaimID().equals(dependent.getCustomerClaims())) {
+                    System.out.printf("%-20s %-20s %-20s %-20s\n", insuranceClaim.getClaimID(), insuranceClaim.getClaimDate(), insuranceClaim.getClaimAmount(), insuranceClaim.getClaimStatus());
+                }
+            }
+        }
+
+    }
 
     //This method is used to add a dependent to the list of dependents
     public void addDependentToList(String customerID, String customerFullName, String customerInsuranceCard, String customerClaims, String dependOnHolderID) {
