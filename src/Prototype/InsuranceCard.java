@@ -12,8 +12,7 @@ import java.util.Scanner;
 public class InsuranceCard implements DataHandler, ClaimProcessManager{
     protected ArrayList<InsuranceCard> insuranceCards = new ArrayList<>();
     //Attributes//
-    protected String insuranceID;
-    protected Integer cardNumber;
+    protected String insuranceCardID;
     protected String cardHolder;
     protected String cardPolicyOwner;
     protected LocalDate cardExpDate;
@@ -21,16 +20,14 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
 
     // Constructor //
     public InsuranceCard() {
-        this.insuranceID = "CRD0000000000";
-        this.cardNumber = 0;
+        this.insuranceCardID = "CRD-0000000000";
         this.cardHolder = "";
         this.cardPolicyOwner = "";
         this.cardExpDate = LocalDate.now();                         //This needs some more thoughts
     }
 
-    public InsuranceCard(String insuranceID, Integer cardNumber, String cardHolder, String cardPolicyOwner, LocalDate cardExpDate) {
-        this.insuranceID = insuranceID;
-        this.cardNumber = cardNumber;
+    public InsuranceCard(String insuranceCardID, String cardHolder, String cardPolicyOwner, LocalDate cardExpDate) {
+        this.insuranceCardID = insuranceCardID;
         this.cardHolder = cardHolder;
         this.cardPolicyOwner = cardPolicyOwner;
         this.cardExpDate = cardExpDate;                             //This needs some more thoughts
@@ -38,10 +35,7 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
 
     // Getters //
     public String getInsuranceID() {
-        return insuranceID;
-    }
-    public Integer getCardNumber() {
-        return cardNumber;
+        return insuranceCardID;
     }
     public String getCardHolder() {
         return cardHolder;
@@ -54,11 +48,8 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
     }
 
     // Setters //
-    public void setInsuranceID(String insuranceID) {
-        this.insuranceID = insuranceID;
-    }
-    public void setCardNumber(Integer cardNumber) {
-        this.cardNumber = cardNumber;
+    public void setInsuranceID(String insuranceCardID) {
+        this.insuranceCardID = insuranceCardID;
     }
     public void setCardHolder(String cardHolder) {
         this.cardHolder = cardHolder;
@@ -77,12 +68,11 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
         insuranceCardScanner.useDelimiter(",|\n");
 
         while (insuranceCardScanner.hasNext()){
-            String insuranceID = insuranceCardScanner.next();
-            Integer cardNumber = insuranceCardScanner.nextInt();
+            String insuranceCardID = insuranceCardScanner.next();
             String cardHolder = insuranceCardScanner.next();
             String cardPolicyOwner = insuranceCardScanner.next();
             LocalDate cardExpDate = LocalDate.parse(insuranceCardScanner.next());
-            addInsuranceCardToList(insuranceID, cardNumber, cardHolder, cardPolicyOwner, cardExpDate);
+            addInsuranceCardToList(insuranceCardID, cardHolder, cardPolicyOwner, cardExpDate);
         }
     }
 
@@ -92,14 +82,14 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
         PrintWriter out0 = new PrintWriter(insuranceCardFile);
 
         for (InsuranceCard insuranceCard : insuranceCards){
-            out0.printf("%s,%d,%s,%s,%s\n", insuranceCard.getInsuranceID(), insuranceCard.getCardNumber(), insuranceCard.getCardHolder(), insuranceCard.getCardPolicyOwner(), insuranceCard.getCardExpDate());
+            out0.printf("%s,%s,%s,%s\n", insuranceCard.getInsuranceID(), insuranceCard.getCardHolder(), insuranceCard.getCardPolicyOwner(), insuranceCard.getCardExpDate());
         }
         out0.close();
     }
 
     // Methods //
-    public void addInsuranceCardToList(String insuranceID, Integer cardNumber, String cardHolder, String cardPolicyOwner, LocalDate cardExpDate) {
-        InsuranceCard insuranceCard = new InsuranceCard(insuranceID, cardNumber, cardHolder, cardPolicyOwner, cardExpDate);
+    public void addInsuranceCardToList(String insuranceCardID, String cardHolder, String cardPolicyOwner, LocalDate cardExpDate) {
+        InsuranceCard insuranceCard = new InsuranceCard(insuranceCardID, cardHolder, cardPolicyOwner, cardExpDate);
         insuranceCards.add(insuranceCard);
     }
 
@@ -125,7 +115,7 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
 
     @Override
     public void getAll() {
-        System.out.printf("%-20s %-20s %-20s %-20s %-20s\n", "Insurance ID", "Card Number", "Card Holder", "Policy Owner", "Expiry Date");
+        System.out.printf("%-20s %-20s %-20s %-20s\n", "Insurance Card ID", "Card Holder", "Policy Owner", "Expiry Date");
         for (InsuranceCard insuranceCard : insuranceCards){
             System.out.println(insuranceCard.toString());
         }
@@ -134,6 +124,6 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
     // toString //
     @Override
     public String toString() {
-        return insuranceID + cardNumber + cardHolder + cardPolicyOwner + cardExpDate;
+        return insuranceCardID + cardHolder + cardPolicyOwner + cardExpDate;
     }
 }

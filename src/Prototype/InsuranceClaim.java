@@ -27,7 +27,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
     protected InsuranceCard claimCardNumber;
     protected LocalDate examDate;
     private String relatedDocuments;
-    protected String claimStatus;                                 //New, Pending, Done. One of the three, nothing else, will have exception handler for this
+    protected String claimStatus;                                 //New, Processing, Done. One of the three, nothing else, will have exception handler for this
     protected String claimAmount;
     protected String bankingInfo;
 
@@ -127,7 +127,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
             String claimID = claimScanner.nextLine();
             LocalDate claimDate = LocalDate.parse(claimScanner.next());
             String claimInsuredPerson = claimScanner.next();
-            InsuranceCard claimCardNumber = new InsuranceCard(claimScanner.next(), claimScanner.nextInt(), claimScanner.next(), claimScanner.next(), LocalDate.parse(claimScanner.next()));
+            InsuranceCard claimCardNumber = new InsuranceCard(claimScanner.next(), claimScanner.next(), claimScanner.next(), LocalDate.parse(claimScanner.next()));
             LocalDate examDate = LocalDate.parse(claimScanner.next());
             String relatedDocuments = claimScanner.next();
             String claimStatus = claimScanner.next();
@@ -200,7 +200,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
             LocalDate examDate = LocalDate.parse(input.next());
             System.out.println("Enter the related documents: ");
             String relatedDocuments = input.next();
-            System.out.println("Enter the claim status [New - Pending - Done]: ");
+            System.out.println("Enter the claim status [New - Processing - Done]: ");
             String claimStatus = input.next();
             System.out.println("Enter the claim amount: ");
             String claimAmount = input.next();
