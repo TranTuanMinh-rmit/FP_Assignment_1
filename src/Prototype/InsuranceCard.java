@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class InsuranceCard implements DataHandler, ClaimProcessManager{
-    protected ArrayList<InsuranceCard> insuranceCards = new ArrayList<>();
+    ArrayList<InsuranceCard> insuranceCards = new ArrayList<>();
     //Attributes//
     protected String insuranceCardID;
     protected String cardHolder;
     protected String cardPolicyOwner;
-    protected LocalDate cardExpDate;
+    protected String cardExpDate;
 
 
     // Constructor //
@@ -23,10 +23,10 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
         this.insuranceCardID = "CRD-0000000000";
         this.cardHolder = "";
         this.cardPolicyOwner = "";
-        this.cardExpDate = LocalDate.now();                         //This needs some more thoughts
+        this.cardExpDate = "2020-01-01";                       //This needs some more thoughts
     }
 
-    public InsuranceCard(String insuranceCardID, String cardHolder, String cardPolicyOwner, LocalDate cardExpDate) {
+    public InsuranceCard(String insuranceCardID, String cardHolder, String cardPolicyOwner, String cardExpDate) {
         this.insuranceCardID = insuranceCardID;
         this.cardHolder = cardHolder;
         this.cardPolicyOwner = cardPolicyOwner;
@@ -43,7 +43,7 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
     public String getCardPolicyOwner() {
         return cardPolicyOwner;
     }
-    public LocalDate getCardExpDate() {
+    public String getCardExpDate() {
         return cardExpDate;
     }
 
@@ -57,28 +57,28 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
     public void setCardPolicyOwner(String cardPolicyOwner) {
         this.cardPolicyOwner = cardPolicyOwner;
     }
-    public void setCardExpDate(LocalDate cardExpDate) {
+    public void setCardExpDate(String cardExpDate) {
         this.cardExpDate = cardExpDate;
     }
 
     // Data Handler //
     @Override
     public void readData() throws FileNotFoundException {
-        Scanner insuranceCardScanner = new Scanner(new File("src/Data/InsuranceCards.csv"));
+        Scanner insuranceCardScanner = new Scanner(new File("src/Datafiles/InsuranceCards.csv"));
         insuranceCardScanner.useDelimiter(",|\n");
 
         while (insuranceCardScanner.hasNext()){
             String insuranceCardID = insuranceCardScanner.next();
             String cardHolder = insuranceCardScanner.next();
             String cardPolicyOwner = insuranceCardScanner.next();
-            LocalDate cardExpDate = LocalDate.parse(insuranceCardScanner.next());
+            String cardExpDate = insuranceCardScanner.next();
             addInsuranceCardToList(insuranceCardID, cardHolder, cardPolicyOwner, cardExpDate);
         }
     }
 
     @Override
     public void writeData() throws IOException {
-        FileWriter insuranceCardFile = new FileWriter("src/Data/InsuranceCards.csv", false);
+        FileWriter insuranceCardFile = new FileWriter("src/Datafiles/InsuranceCards.csv", false);
         PrintWriter out0 = new PrintWriter(insuranceCardFile);
 
         for (InsuranceCard insuranceCard : insuranceCards){
@@ -88,7 +88,7 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
     }
 
     // Methods //
-    public void addInsuranceCardToList(String insuranceCardID, String cardHolder, String cardPolicyOwner, LocalDate cardExpDate) {
+    public void addInsuranceCardToList(String insuranceCardID, String cardHolder, String cardPolicyOwner, String cardExpDate) {
         InsuranceCard insuranceCard = new InsuranceCard(insuranceCardID, cardHolder, cardPolicyOwner, cardExpDate);
         insuranceCards.add(insuranceCard);
     }
@@ -113,17 +113,20 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
 
     }
 
+
     @Override
     public void getAll() {
-        System.out.printf("%-20s %-20s %-20s %-20s\n", "Insurance Card ID", "Card Holder", "Policy Owner", "Expiry Date");
-        for (InsuranceCard insuranceCard : insuranceCards){
-            System.out.println(insuranceCard.toString());
+        System.out.println(String.format("%-20s %-25s %-20s %-20s", "Insurance Card ID", "Card Holder", "Policy Owner", "Expiry Date"));
+        for (InsuranceCard insuranceCard2 : insuranceCards){
+            //System.out.println(insuranceCard.toString());
+            //System.out.println(insuranceCard.getInsuranceID() + " " + insuranceCard.getCardHolder() + " " + insuranceCard.getCardPolicyOwner() + " " + insuranceCard.getCardExpDate());
+            System.out.println(String.format("%-20s %-25s %-20s %-15s", insuranceCard2.getInsuranceID(), insuranceCard2.getCardHolder(), insuranceCard2.getCardPolicyOwner(), "2029-12-31"));
         }
     }
 
     // toString //
     @Override
     public String toString() {
-        return insuranceCardID + cardHolder + cardPolicyOwner + cardExpDate;
+        return String.format("InsuranceCard[ID=%s, Holder=%s, PolicyOwner=%s, ExpiryDate=%s]", insuranceCardID, cardHolder, cardPolicyOwner, cardExpDate);
     }
 }

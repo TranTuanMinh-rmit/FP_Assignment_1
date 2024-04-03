@@ -10,7 +10,7 @@ import java.io.IOException;
 public interface ClaimProcessManager {
     public void add() throws InterruptedException, IOException;
     public void update() throws IOException;
-    public void delete();
+    public void delete() throws IOException;
     public void getOne();
     public void getAll();
 }

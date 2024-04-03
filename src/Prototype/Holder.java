@@ -12,19 +12,34 @@ import java.util.Scanner;
 public class Holder extends Customer implements DataHandler{
     // ArrayList //
     ArrayList<Holder> holders = new ArrayList<>();
-    public ArrayList<Holder> getHolders() {
-        return holders;
-    }
-    private Dependent dependent = new Dependent();
-    private InsuranceClaim insuranceClaim = new InsuranceClaim();
+
     // Attributes //
-    private String holderControlID;
+    protected String holderControlID;
+    protected String holderDependents;
     // Constructor //
-    public Holder(String customerID, String customerFullName, String customerInsuranceCard, String customerClaims) {
+    public Holder(String customerID, String customerFullName, String customerInsuranceCard, String customerClaims, String holderDependents, String holderControlID) {
         super(customerID, customerFullName, customerInsuranceCard, customerClaims);
+        this.holderDependents = holderDependents;
+        this.holderControlID = holderControlID;
     }
     public Holder() {
         super();
+    }
+
+    // Getters //
+    public String getHolderControlID() {
+        return holderControlID;
+    }
+    public String getHolderDependents() {
+        return holderDependents;
+    }
+
+    // Setters //
+    public void setHolderControlID(String holderControlID) {
+        this.holderControlID = holderControlID;
+    }
+    public void setHolderDependents(String holderDependents) {
+        this.holderDependents = holderDependents;
     }
 
     // Data Handler //
@@ -38,7 +53,9 @@ public class Holder extends Customer implements DataHandler{
             String customerFullName = holderScanner.next();
             String customerInsuranceCard = holderScanner.next();
             String customerClaims = holderScanner.next();
-            addHolderToList(customerID, customerFullName, customerInsuranceCard, customerClaims);
+            String holderDependents = holderScanner.next();
+            String holderControlID = holderScanner.next();
+            addHolderToList(customerID, customerFullName, customerInsuranceCard, customerClaims, holderDependents, holderControlID);
         }
     }
 
@@ -48,43 +65,20 @@ public class Holder extends Customer implements DataHandler{
         PrintWriter out0 = new PrintWriter(holderWriter);
 
         for (Holder holder : holders){
-            out0.printf("%s,%s,%s,%s,%s\n", holder.getCustomerID(), holder.getCustomerFullName(), holder.getCustomerInsuranceCard(), holder.getCustomerClaims());
+            out0.printf("%s,%s,%s,%s,%s,%s\n", holder.getCustomerID(), holder.getCustomerFullName(), holder.getCustomerInsuranceCard(), holder.getCustomerClaims(), holder.getHolderDependents(), holder.getHolderControlID());
         }
         out0.close();
     }
 
     // Methods //
-    public void addHolderToList(String customerID, String customerFullName, String customerInsuranceCard, String customerClaims) {
-        Holder holder = new Holder(customerID, customerFullName, customerInsuranceCard, customerClaims);
+    public void addHolderToList(String customerID, String customerFullName, String customerInsuranceCard, String customerClaims, String holderDependents, String holderControlID) {
+        Holder holder = new Holder(customerID, customerFullName, customerInsuranceCard, customerClaims, holderDependents, holderControlID);
         holders.add(holder);
     }
-    public void printHolders() throws FileNotFoundException {              //This method will print the holders and their dependents. Need to remember to put readData() in the main method to make sure new data is read.
-        readData();
-        ArrayList<Dependent> dependents = dependent.getDependents();
-        ArrayList<InsuranceClaim> insuranceClaims = insuranceClaim.getClaimsList();
-        for (Holder holder : holders) {
-            System.out.println("====================================================================================================================================================================");
-            System.out.println(String.format("=" ,"%-25 %-25 %-25 %-25", holder.getCustomerID() + " " + holder.getCustomerFullName() + " " + holder.getCustomerInsuranceCard() + " " + holder.getCustomerClaims() + "="));
-            System.out.println("=------------------------------------------------------------------------------------------------------------------------------------------------------------------=");
-
-            //This loop will iterate through the insuranceClaims list and print the claims of the holder
-            System.out.println("=Insurance Claims                                                                                                                                                  =");
-            System.out.println(String.format("%-25 %-25 %-25 %-25 %-25 %-25 %-25 %-25", "Claim ID", "Claim Date", "Card Number", "Exam Date", "Related Documents", "Claim Status", "Claim Amount", "Banking Info"));
-            for (InsuranceClaim insuranceClaim : insuranceClaims){
-                if (insuranceClaim.getClaimInsuredPerson().equals(holder.getCustomerFullName())){
-                    System.out.println(String.format("=" ,"%-25 %-25 %-25 %-25 %-25 %-25 %-25 %-25", insuranceClaim.getClaimID() + " " + insuranceClaim.getClaimDate() + " "+ insuranceClaim.getClaimCardNumber() + " " + insuranceClaim.getExamDate() + " " + insuranceClaim.getRelatedDocuments() + " " + insuranceClaim.getClaimStatus() + " " + insuranceClaim.getClaimAmount() + " " + insuranceClaim.getBankingInfo() + "="));
-                }
-            }
-
-            //This loop will iterate through the dependents list and print the dependents of the holder
-            System.out.println("=Dependents                                                                                                                                                        =");
-            System.out.println(String.format("%-25 %-25 %-25 %-25", "Customer ID", "Customer Name", "Insurance Card", "Claims"));
-            for (Dependent dependent : dependents) {
-                if (dependent.getDependOnHolderID().equals(holder.getCustomerID())) {
-                    System.out.println(String.format("=" ,"%-25 %-25 %-25 %-25", dependent.getCustomerID() + " " + dependent.getCustomerFullName() + " " + dependent.getCustomerInsuranceCard() + " " + dependent.getCustomerClaims() + "="));
-                }
-            }
+    public void printHolders(){              //This method will print the holders and their dependents. Need to remember to put readData() in the main method to make sure new data is read.
+        System.out.println(String.format("%-25s %-25s %-25s %-25s %-25s", "Customer ID", "Customer Name", "Insurance Card", "Claims", "Dependents"));
+        for (Holder holder2 : holders) {
+            System.out.println(String.format("%-25s %-25s %-25s %-25s %-25s", holder2.getCustomerID(), holder2.getCustomerFullName(), holder2.getCustomerInsuranceCard(), holder2.getCustomerClaims(), holder2.getHolderDependents()));
         }
-        System.out.println("====================================================================================================================================================================");
     }
 }

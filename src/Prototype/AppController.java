@@ -14,10 +14,7 @@ public class AppController {
     Dependent dependent = new Dependent();
 
     public void run() throws IOException, InterruptedException{
-        preProcessing();
         mainMenu();
-        postProcessing();
-
     }
     public void preProcessing() throws FileNotFoundException, InterruptedException {
         System.out.println("Loading data from file...");
@@ -50,20 +47,21 @@ public class AppController {
     }
 
     public void mainMenu() throws IOException, InterruptedException {
+        preProcessing();
         Scanner mainMenuScanner = new Scanner(System.in);
         Boolean mainMenuLoop = true;
         System.out.println("Welcome to the Insurance Claim System!");
-        System.out.println("Please select an option:\n" +
-                "1. Display All Holder\n" +
-                "2. Display All Dependents\n" +
-                "3. Display All Insurance Cards\n" +
-                "4. Display All Insurance Claim\n" +
-                "5. Display A Specific Insurance Claim\n" +
-                "6. New Insurance Claim\n" +
-                "7. Update Insurance Claim Details\n" +
-                "8. Delete Insurance Claim\n" +
-                "9. Exit");
         while (mainMenuLoop) {
+            System.out.println("Please select an option:\n" +
+                    "1. Display All Holder\n" +
+                    "2. Display All Dependents\n" +
+                    "3. Display All Insurance Cards\n" +
+                    "4. Display All Insurance Claim\n" +
+                    "5. Display A Specific Insurance Claim\n" +
+                    "6. New Insurance Claim\n" +
+                    "7. Update Insurance Claim Details\n" +
+                    "8. Delete Insurance Claim\n" +
+                    "9. Exit");
             System.out.print("Please enter your choice: ");
             String mainMenuChoice = mainMenuScanner.nextLine();
             switch (mainMenuChoice) {
@@ -92,7 +90,9 @@ public class AppController {
                     insuranceClaim.delete();
                     break;
                 case "9":
+                    postProcessing();
                     mainMenuLoop = false;
+                    break;
                 default:
                     System.out.println("Invalid choice! Please try again.");
                     break;

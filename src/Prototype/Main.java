@@ -7,8 +7,8 @@ import java.io.IOException;
  */
 
 public class Main {
-    AppController appController = new AppController();
-    public void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String[] args) throws IOException, InterruptedException {
+        AppController appController = new AppController();
         appController.run();
     }
 }
