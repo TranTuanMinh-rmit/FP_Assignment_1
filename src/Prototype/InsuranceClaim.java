@@ -19,10 +19,10 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
     //Attributes//
     protected String newID;
     protected String claimID;
-    protected String claimDate;
+    protected LocalDate claimDate;
     protected String claimInsuredPerson;
     protected String claimCardNumber;
-    protected String examDate;
+    protected LocalDate examDate;
     protected String relatedDocuments;
     protected String claimStatus;                                 //New, Processing, Done. One of the three, nothing else, will have exception handler for this
     protected String claimAmount;
@@ -32,17 +32,17 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
     // Constructor //
     public InsuranceClaim() {
         this.claimID = "F-0000000000";
-        this.claimDate = "2020-01-01";
+        this.claimDate = LocalDate.parse("2020-01-01");
         this.claimInsuredPerson = "";
         this.claimCardNumber = "CRD-0000000000";
-        this.examDate = "2020-01-01";
+        this.examDate = LocalDate.parse("2020-01-01");
         this.relatedDocuments = "";
         this.claimStatus = "";
         this.claimAmount = "";
         this.bankingInfo = "";
     }
 
-    public InsuranceClaim(String claimID, String claimDate, String claimInsuredPerson, String claimCardNumber, String examDate, String relatedDocuments, String claimStatus, String claimAmount, String bankingInfo) {
+    public InsuranceClaim(String claimID, LocalDate claimDate, String claimInsuredPerson, String claimCardNumber, LocalDate examDate, String relatedDocuments, String claimStatus, String claimAmount, String bankingInfo) {
         this.claimID = claimID;
         this.claimDate = claimDate;
         this.claimInsuredPerson = claimInsuredPerson;
@@ -59,7 +59,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
     public String getClaimID() {
         return claimID;
     }
-    public String getClaimDate() {
+    public LocalDate getClaimDate() {
         return claimDate;
     }
     public String getClaimInsuredPerson() {
@@ -68,7 +68,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
     public String getClaimCardNumber() {
         return claimCardNumber;
     }
-    public String getExamDate() {
+    public LocalDate getExamDate() {
         return examDate;
     }
     public String getRelatedDocuments() {
@@ -89,7 +89,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
     public void setClaimID(String claimID) {
         this.claimID = claimID;
     }
-    public void setClaimDate(String claimDate) {
+    public void setClaimDate(LocalDate claimDate) {
         this.claimDate = claimDate;
     }
     public void setClaimInsuredPerson(String claimInsuredPerson) {
@@ -98,7 +98,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
     public void setClaimCardNumber(String claimCardNumber) {
         this.claimCardNumber = claimCardNumber;
     }
-    public void setExamDate(String examDate) {
+    public void setExamDate(LocalDate examDate) {
         this.examDate = examDate;
     }
     public void setRelatedDocuments(String relatedDocuments) {
@@ -122,10 +122,12 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
 
         while (claimScanner.hasNext()) {
             String claimID = claimScanner.next();
-            String claimDate = claimScanner.next();
+            String claimDateBuffer = claimScanner.next();
+            LocalDate claimDate = LocalDate.parse(claimDateBuffer);
             String claimInsuredPerson = claimScanner.next();
             String claimCardNumber = claimScanner.next();
-            String examDate = claimScanner.next();
+            String examDateBuffer = claimScanner.next();
+            LocalDate examDate = LocalDate.parse(examDateBuffer);
             String relatedDocuments = claimScanner.next();
             String claimStatus = claimScanner.next();
             String claimAmount = claimScanner.next();
@@ -145,7 +147,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
     }
 
     // Methods //
-    public void addClaimToList(String claimID, String claimDate, String claimInsuredPerson, String claimCardNumber, String examDate, String relatedDocuments, String claimStatus, String claimAmount, String bankingInfo) {
+    public void addClaimToList(String claimID, LocalDate claimDate, String claimInsuredPerson, String claimCardNumber, LocalDate examDate, String relatedDocuments, String claimStatus, String claimAmount, String bankingInfo) {
         claimsList.add(new InsuranceClaim(claimID, claimDate, claimInsuredPerson, claimCardNumber, examDate, relatedDocuments, claimStatus, claimAmount, bankingInfo));
     }
 
@@ -166,22 +168,25 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
         String claimID = newID;
         Thread.sleep(300);
         System.out.println("Enter the claim date [yyyy-MM-dd]: ");                      //This is running under the assumption that this is the day a customer is filling for a claim
-        String claimDate = input.nextLine();
+        String claimDateBuffer = input.nextLine();
+        LocalDate claimDate = LocalDate.parse(claimDateBuffer);
         System.out.println("Enter the name of the insured person: ");
         String claimInsuredPerson = input.nextLine();
         System.out.println("Enter the card number: ");
         String claimCardNumber = input.nextLine();
         System.out.println("Enter the examination date [yyyy-MM-dd]: ");                //This is the day set for examining the customer making this claim
-        String examDate = input.nextLine();
+        String examDateBuffer = input.nextLine();
+        LocalDate examDate = LocalDate.parse(examDateBuffer);
         System.out.println("Enter the related documents: ");
-        String relatedDocuments = input.nextLine();
+        String relatedDocumentBuffer = input.nextLine();
+        String relatedDocuments = claimID + "_" + claimCardNumber + "_" + relatedDocumentBuffer + ".pdf";
         System.out.println("Enter the claim status [New - Processing - Done]: ");
         String claimStatus = input.nextLine();
         System.out.println("Enter the claim amount: ");
         String claimAmount = input.nextLine();
-        System.out.println("Enter the banking information [TBA]: ");
+        System.out.println("Enter the banking information [Bank - Name - Account Number]: ");
         String bankingInfo = input.nextLine();
-        addClaimToList(claimID, claimDate, claimInsuredPerson, claimCardNumber, examDate, relatedDocuments + ".pdf", claimStatus, claimAmount, bankingInfo);
+        addClaimToList(claimID, claimDate, claimInsuredPerson, claimCardNumber, examDate, relatedDocuments, claimStatus, claimAmount, bankingInfo);
     }
 
 
@@ -212,7 +217,8 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
                 switch(updateChoice){
                     case "1":
                         System.out.println("Enter the new examination date [yyyy-MM-dd]: ");
-                        String newExamDate = inputClaimForUpdate.next();
+                        String newExamDateBuffer = inputClaimForUpdate.next();
+                        LocalDate newExamDate = LocalDate.parse(newExamDateBuffer);
                         for (InsuranceClaim claim : claimsFoundUpdate){
                             claim.setExamDate(newExamDate);
                         }
@@ -222,7 +228,11 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
                         System.out.println("Enter the new claim status [New - Pending - Done]: ");
                         String newClaimStatus = inputClaimForUpdate.next();
                         for (InsuranceClaim claim : claimsFoundUpdate){
-                            claim.setClaimStatus(newClaimStatus);
+                            if (newClaimStatus.equals("New") || newClaimStatus.equals("Pending") || newClaimStatus.equals("Done")){
+                                claim.setClaimStatus(newClaimStatus);
+                            } else {
+                                System.out.println("Invalid claim status!");
+                            }
                         }
                         writeData();
                         break;
