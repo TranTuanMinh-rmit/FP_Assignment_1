@@ -23,6 +23,7 @@ public class AppController {
         System.out.println("...");
         Thread.sleep(500);
         insuranceClaim.readData();
+        insuranceClaim.getLastIDGenerated();
         System.out.println("...");
         Thread.sleep(500);
         holder.readData();
@@ -38,6 +39,7 @@ public class AppController {
         try {
             insuranceCard.writeData();
             insuranceClaim.writeData();
+            insuranceClaim.writeLastIDGenerated();
             holder.writeData();
             dependent.writeData();
         } catch (Exception e) {
@@ -82,6 +84,7 @@ public class AppController {
                     break;
                 case "6":
                     insuranceClaim.add();
+                    insuranceClaim.writeLastIDGenerated();
                     break;
                 case "7":
                     insuranceClaim.update();

@@ -10,13 +10,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
-public class InsuranceClaim implements ClaimProcessManager, DataHandler{
+public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generator{
     private ArrayList<InsuranceClaim> claimsList = new ArrayList<>();
+    private ArrayList<Integer> lastClaimEntry = new ArrayList<Integer>();
+    private ArrayList<Integer> newLastClaimEntry = new ArrayList<Integer>();
     public ArrayList<InsuranceClaim> getClaimsList() {
         return claimsList;
     }
 
     //Attributes//
+    protected Integer strippedID;
     protected String newID;
     protected String claimID;
     protected LocalDate claimDate;
@@ -151,12 +154,32 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler{
         claimsList.add(new InsuranceClaim(claimID, claimDate, claimInsuredPerson, claimCardNumber, examDate, relatedDocuments, claimStatus, claimAmount, bankingInfo));
     }
 
+    @Override
+    public void getLastIDGenerated() throws FileNotFoundException {
+        Scanner idScanner = new Scanner(new File("src/Datafiles/ClaimsID.csv"));
+        while (idScanner.hasNext()) {
+            Integer lastID = idScanner.nextInt();
+            lastClaimEntry.add(lastID);
+        }
+    }
 
+    @Override
+    public void writeLastIDGenerated() throws IOException {
+        FileWriter idWriter = new FileWriter("src/Datafiles/ClaimsID.csv");
+        PrintWriter out1 = new PrintWriter(idWriter);
+        for (Integer newLastID : newLastClaimEntry) {
+            out1.printf("%d", newLastID);
+        }
+        out1.close();
+    }
+
+    @Override
     public void generateID(){
-        int lastID = claimsList.size();
-        lastID++;
+        strippedID = lastClaimEntry.get(0) + 1;
+        newLastClaimEntry.add(strippedID);
         //This method will generate a unique claim ID for each claim
-        newID = String.format("f-" + "%010d", lastID);
+        newID = String.format("f-" + "%010d", strippedID);
+        System.out.println("Generated ID: " + newID);
     }
 
     // CRUD //
