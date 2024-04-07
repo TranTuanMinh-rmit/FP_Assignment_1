@@ -45,7 +45,7 @@ public class Dependent extends Customer implements DataHandler{
 
     // Data Handler //
     @Override
-    public void readData() throws FileNotFoundException {
+    public void readData() throws FileNotFoundException {     //This method reads data from the file and adds it to the list of dependents
         Scanner dependentScanner = new Scanner(new File("src/Datafiles/DependentData.csv"));
         dependentScanner.useDelimiter("[,\n]");
 
@@ -61,7 +61,7 @@ public class Dependent extends Customer implements DataHandler{
     }
 
     @Override
-    public void writeData() throws IOException {
+    public void writeData() throws IOException {      //This method writes data to the file
         FileWriter dependentWriter = new FileWriter("src/Datafiles/DependentData.csv", false);
         PrintWriter out1 = new PrintWriter(dependentWriter);
 
@@ -72,7 +72,7 @@ public class Dependent extends Customer implements DataHandler{
     }
 
     // Methods //
-    public void printAllDependents() {
+    public void printAllDependents() {     //This method prints all the dependents
         System.out.println(String.format("%-20s %-20s %-20s %-20s %-20s", "Customer ID", "Customer Name", "Insurance Card", "Claims", "Depend On Holder"));
         for (Dependent dependent2 : dependents) {
             System.out.println(String.format("%-20s %-20s %-20s %-20s %-20s", dependent2.getCustomerID(), dependent2.getCustomerFullName(), dependent2.getCustomerInsuranceCard(), dependent2.getCustomerClaims(), dependent2.getDependOnHolderID()));

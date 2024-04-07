@@ -4,6 +4,7 @@ package Prototype;
  */
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +45,7 @@ public class Holder extends Customer implements DataHandler{
 
     // Data Handler //
     @Override
-    public void readData() throws FileNotFoundException {
+    public void readData() throws FileNotFoundException {                   //This method reads the data from the file and adds it to the list
         Scanner holderScanner = new Scanner(new File("src/Datafiles/HolderData.csv"));
         holderScanner.useDelimiter("[,\n]");
 
@@ -60,7 +61,7 @@ public class Holder extends Customer implements DataHandler{
     }
 
     @Override
-    public void writeData() throws IOException{
+    public void writeData() throws IOException{                                 //This method writes the data to the file
         FileWriter holderWriter = new FileWriter("src/Datafiles/HolderData.csv", false);
         PrintWriter out0 = new PrintWriter(holderWriter);
 
@@ -71,6 +72,7 @@ public class Holder extends Customer implements DataHandler{
     }
 
     // Methods //
+    // This method will add the holder to the list
     public void addHolderToList(String customerID, String customerFullName, String customerInsuranceCard, String customerClaims, String holderDependents, String holderControlID) {
         Holder holder = new Holder(customerID, customerFullName, customerInsuranceCard, customerClaims, holderDependents, holderControlID);
         holders.add(holder);

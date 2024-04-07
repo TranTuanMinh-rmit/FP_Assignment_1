@@ -16,23 +16,28 @@ public class AppController {
     public void run() throws IOException, InterruptedException{
         mainMenu();
     }
+
+    // Pre Processing. This reads all the data from files //
     public void preProcessing() throws FileNotFoundException, InterruptedException {
         System.out.println("Loading data from file...");
+        Holder holder = new Holder();
         Thread.sleep(500);
-        insuranceCard.readData();
+        holder.readData();
+        System.out.println("...");
+        Thread.sleep(500);
+        dependent.readData();
         System.out.println("...");
         Thread.sleep(500);
         insuranceClaim.readData();
         insuranceClaim.getLastIDGenerated();
         System.out.println("...");
         Thread.sleep(500);
-        holder.readData();
-        System.out.println("...");
-        Thread.sleep(500);
-        dependent.readData();
+        insuranceCard.readData();
         System.out.println("Data loaded successfully!");
     }
 
+
+    // Post Processing. This writes all the data to files. Some methods already write data to file as a precaution //
     public void postProcessing() throws IOException, InterruptedException {
         System.out.println("Saving data to file...");
         Thread.sleep(500);
@@ -48,6 +53,8 @@ public class AppController {
         System.out.println("Data saved successfully!");
     }
 
+
+    // Main Menu //
     public void mainMenu() throws IOException, InterruptedException {
         preProcessing();
         Scanner mainMenuScanner = new Scanner(System.in);

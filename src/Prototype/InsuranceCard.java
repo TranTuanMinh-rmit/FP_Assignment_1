@@ -63,7 +63,7 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
 
     // Data Handler //
     @Override
-    public void readData() throws FileNotFoundException {
+    public void readData() throws FileNotFoundException {     //This method reads data from the file and adds it to the list
         Scanner insuranceCardScanner = new Scanner(new File("src/Datafiles/InsuranceCards.csv"));
         insuranceCardScanner.useDelimiter(",|\n");
 
@@ -77,7 +77,7 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
     }
 
     @Override
-    public void writeData() throws IOException {
+    public void writeData() throws IOException {            //This method writes data from the list to the file
         FileWriter insuranceCardFile = new FileWriter("src/Datafiles/InsuranceCards.csv", false);
         PrintWriter out0 = new PrintWriter(insuranceCardFile);
 
@@ -88,6 +88,7 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
     }
 
     // Methods //
+    //This method adds a new insurance card to the list
     public void addInsuranceCardToList(String insuranceCardID, String cardHolder, String cardPolicyOwner, String cardExpDate) {
         InsuranceCard insuranceCard = new InsuranceCard(insuranceCardID, cardHolder, cardPolicyOwner, cardExpDate);
         insuranceCards.add(insuranceCard);
@@ -113,9 +114,8 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
 
     }
 
-
     @Override
-    public void getAll() {
+    public void getAll() {                    //This method prints all the insurance cards in the list
         System.out.println(String.format("%-20s %-25s %-20s %-20s", "Insurance Card ID", "Card Holder", "Policy Owner", "Expiry Date"));
         for (InsuranceCard insuranceCard2 : insuranceCards){
             //System.out.println(insuranceCard.toString());
@@ -126,7 +126,7 @@ public class InsuranceCard implements DataHandler, ClaimProcessManager{
 
     // toString //
     @Override
-    public String toString() {
+    public String toString() {          //This method returns the string representation of the insurance card. Not really needed.
         return String.format("InsuranceCard[ID=%s, Holder=%s, PolicyOwner=%s, ExpiryDate=%s]", insuranceCardID, cardHolder, cardPolicyOwner, cardExpDate);
     }
 }

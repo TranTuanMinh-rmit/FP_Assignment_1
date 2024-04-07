@@ -34,7 +34,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
 
     // Constructor //
     public InsuranceClaim() {
-        this.claimID = "F-0000000000";
+        this.claimID = "f-0000000000";
         this.claimDate = LocalDate.parse("2020-01-01");
         this.claimInsuredPerson = "";
         this.claimCardNumber = "CRD-0000000000";
@@ -119,7 +119,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
 
     // Data Handlers //
     @Override
-    public void readData() throws FileNotFoundException {
+    public void readData() throws FileNotFoundException {           //This method reads data from the file and adds it to the list
         Scanner claimScanner = new Scanner(new File("src/Datafiles/Claims.csv"));
         claimScanner.useDelimiter("[,\n]");
 
@@ -139,7 +139,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
         }
     }
     @Override
-    public void writeData() throws IOException {
+    public void writeData() throws IOException {                    //This method writes data from the list to the file
         FileWriter claimWriter = new FileWriter("src/Datafiles/Claims.csv");
         PrintWriter out2 = new PrintWriter(claimWriter);
 
@@ -150,12 +150,13 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
     }
 
     // Methods //
+    //This method is for adding a claim to the list
     public void addClaimToList(String claimID, LocalDate claimDate, String claimInsuredPerson, String claimCardNumber, LocalDate examDate, String relatedDocuments, String claimStatus, String claimAmount, String bankingInfo) {
         claimsList.add(new InsuranceClaim(claimID, claimDate, claimInsuredPerson, claimCardNumber, examDate, relatedDocuments, claimStatus, claimAmount, bankingInfo));
     }
 
     @Override
-    public void getLastIDGenerated() throws FileNotFoundException {
+    public void getLastIDGenerated() throws FileNotFoundException {         //This method reads the last ID generated from the file
         Scanner idScanner = new Scanner(new File("src/Datafiles/ClaimsID.csv"));
         while (idScanner.hasNext()) {
             Integer lastID = idScanner.nextInt();
@@ -164,7 +165,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
     }
 
     @Override
-    public void writeLastIDGenerated() throws IOException {
+    public void writeLastIDGenerated() throws IOException {                 //This method writes the last ID generated to the file
         FileWriter idWriter = new FileWriter("src/Datafiles/ClaimsID.csv");
         PrintWriter out1 = new PrintWriter(idWriter);
         for (Integer newLastID : newLastClaimEntry) {
@@ -174,7 +175,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
     }
 
     @Override
-    public void generateID(){
+    public void generateID(){                            //This method generates a new ID for a new claim
         strippedID = lastClaimEntry.get(0) + 1;
         newLastClaimEntry.add(strippedID);
         //This method will generate a unique claim ID for each claim
@@ -184,7 +185,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
 
     // CRUD //
     @Override
-    public void add() throws InterruptedException {
+    public void add() throws InterruptedException, FileNotFoundException {      //This method is for adding a new claim
         Scanner input = new Scanner(System.in);
         System.out.println("Generated claim ID...");
         generateID();
@@ -305,6 +306,7 @@ public class InsuranceClaim implements ClaimProcessManager, DataHandler, Generat
         }
     }
 
+    //This method is for displaying a specific claim
     @Override
     public void getOne() {
         ArrayList<InsuranceClaim> claimFoundDisplay = new ArrayList<>();
